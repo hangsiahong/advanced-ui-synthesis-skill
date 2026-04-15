@@ -1,92 +1,60 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-const RetroGrid = () => {
-  return (
-    <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-20">
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `linear-gradient(to right, var(--color-foreground) 1px, transparent 1px), linear-gradient(to bottom, var(--color-foreground) 1px, transparent 1px)`,
-          backgroundSize: "40px 40px",
-          maskImage: "radial-gradient(circle at center, black, transparent 80%)",
-          WebkitMaskImage: "radial-gradient(circle at center, black, transparent 80%)",
-        }}
-      />
-    </div>
-  );
-};
 
 export function CTASection() {
   return (
-    <section className="relative overflow-hidden bg-noise">
-      <RetroGrid />
-      <div className="absolute inset-0">
-        <div className="absolute -left-40 -top-40 h-80 w-80 rounded-full bg-sage/20 blur-3xl" />
-        <div className="absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-terracotta/15 blur-3xl" />
-      </div>
-      
-      <div className="relative mx-auto max-w-7xl px-6 py-32 lg:px-12 lg:py-48">
-        <div className="mx-auto max-w-3xl text-center">
-          <motion.span 
-            initial={{ opacity: 0, filter: "blur(10px)" }}
-            whileInView={{ opacity: 1, filter: "blur(0px)" }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="label-caps text-terracotta inline-block"
-          >
-            Start a Project
-          </motion.span>
-          
-          <motion.h2 
-            initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
-            whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="mt-6 font-display text-4xl lg:text-6xl tracking-tighter"
-          >
-            Ready to build something extraordinary?
-          </motion.h2>
-          
-          <motion.p 
-            initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
-            whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mt-6 text-lg text-muted-foreground"
-          >
-            Let's discuss how we can help bring your vision to life. 
-            Our team is ready to partner with you.
-          </motion.p>
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="mt-10 flex flex-wrap items-center justify-center gap-4"
-          >
-            <Button 
-              size="lg" 
-              className="group relative gap-2 bg-foreground text-background hover:bg-foreground/90 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(var(--color-foreground),0.3)]"
-            >
-              Get in Touch
-              <ArrowUpRight className="h-4 w-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              asChild
-              className="hover:scale-105 transition-transform duration-300"
-            >
-              <Link href="/pricing">View Services</Link>
-            </Button>
-          </motion.div>
-        </div>
+    <section className="py-32 px-6 relative overflow-hidden">
+      {/* Background elements */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-claw-red/20 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(232,27,37,0.05),transparent_70%)] pointer-events-none" />
+
+      <div className="max-w-4xl mx-auto text-center relative z-10">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-6xl md:text-8xl font-bold tracking-tighter mb-8"
+        >
+          Ready to Get <span className="text-gradient">Claws?</span>
+        </motion.h2>
+        
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.1 }}
+          className="text-xl md:text-2xl text-white/60 mb-12 max-w-2xl mx-auto leading-relaxed"
+        >
+          Choose your path — hardware or managed. Either way, your AI is about to get a lot more personal.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
+        >
+          <Button size="lg" className="h-16 px-10 rounded-full bg-claw-red hover:bg-claw-hover text-white text-lg font-bold min-w-[240px] shadow-2xl shadow-claw-red/30 transition-all hover:scale-[1.05]">
+            Get the Hardware — $450
+          </Button>
+          <Button size="lg" variant="outline" className="h-16 px-10 rounded-full border-white/10 glass hover:bg-white/5 text-white text-lg font-bold min-w-[240px] transition-all hover:scale-[1.05]">
+            Go Managed
+          </Button>
+        </motion.div>
+
+        <motion.a
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4 }}
+          href="#pricing"
+          className="text-white/40 hover:text-white transition-colors flex items-center justify-center gap-2 group"
+        >
+          Compare Plans <span className="group-hover:translate-x-1 transition-transform">→</span>
+        </motion.a>
       </div>
     </section>
   );

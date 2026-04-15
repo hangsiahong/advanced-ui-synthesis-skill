@@ -3,12 +3,14 @@
 @theme {
   --color-background: #050505;
   --color-foreground: #fafafa;
-  --color-primary: #7c3aed;
-  --color-secondary: #1e1b4b;
-  --color-muted: #171717;
-  --color-accent: #3b82f6;
-  --color-border: rgba(255, 255, 255, 0.1);
-  
+  --color-claw-red: #e81b25;
+  --color-claw-hover: #d01820;
+  --color-claw-orange: #FF6B00;
+  --color-surface: #0a0a0b;
+  --color-surface-2: #111113;
+  --color-surface-3: #18181b;
+  --color-surface-4: #1f1f23;
+  --color-border-subtle: rgba(255, 255, 255, 0.06);
   --font-display: "Inter", "system-ui", sans-serif;
 }
 
@@ -23,17 +25,36 @@
 
 @layer utilities {
   .glass {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
   }
   
-  .mesh-gradient {
-    background-image: 
-      radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.15) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
-      radial-gradient(at 50% 100%, rgba(124, 58, 237, 0.05) 0px, transparent 50%);
+  .glass-strong {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .text-gradient {
+    background: linear-gradient(to right, #e81b25, #FF6B00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .text-mask {
-    @apply bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40;
+    background: linear-gradient(to bottom, white 30%, rgba(255, 255, 255, 0.3));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glow-red {
+    box-shadow: 0 0 60px -20px rgba(232, 27, 37, 0.3);
+  }
+
+  .glow-red-sm {
+    box-shadow: 0 0 30px -10px rgba(232, 27, 37, 0.2);
   }
 }
