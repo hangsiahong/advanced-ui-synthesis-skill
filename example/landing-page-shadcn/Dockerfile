@@ -5,7 +5,6 @@ FROM node:20-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
-# Check https://github.com/nodejs/docker-node/tree/main#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
@@ -18,9 +17,6 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-
-# Copy .env file for build (if exists)
-COPY .env* ./
 
 # Build Next.js
 RUN npm run build
@@ -35,12 +31,12 @@ ENV PORT 3000
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy necessary files
+# Copy standalone build
 COPY --from=builder /app/.next/standalone ./
+# Copy static assets for Next.js
 COPY --from=builder /app/.next/static ./.next/static
-
-# Create data directory for SQLite database
-RUN mkdir -p /data/db && chown -R nextjs:nodejs /data/db
+# Copy public folder for static assets (images, etc.)
+COPY --from=builder /app/public ./public
 
 # Set permissions
 RUN chown -R nextjs:nodejs /app
@@ -50,6 +46,5 @@ USER nextjs
 EXPOSE 3000
 
 ENV PORT 3000
-
 
 CMD ["node", "server.js"]

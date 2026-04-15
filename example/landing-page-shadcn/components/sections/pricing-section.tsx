@@ -2,8 +2,22 @@
 
 import { useState } from "react";
 import { motion, Variants } from "framer-motion";
-import { Calendar, Check, Monitor, Cloud, ArrowRight } from "lucide-react";
+import { Calendar, Check, Monitor, Cloud, ArrowRight, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CartesianGrid, Line, LineChart, XAxis, ResponsiveContainer } from 'recharts';
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card';
+import {
+	type ChartConfig,
+	ChartContainer,
+	ChartTooltip,
+	ChartTooltipContent,
+} from '@/components/ui/chart';
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 30, filter: "blur(8px)" },
@@ -19,6 +33,20 @@ const tokenPricing = [
   { model: "Gemini 3 Flash", input: "$0.075", output: "$0.30", context: "1M" },
   { model: "Gemini 3.1 Pro", input: "$1.25", output: "$5.00", context: "2M" },
 ];
+
+const chartData = [
+  { model: "GLM-5T", tokens: 100, cost: 0.07 },
+  { model: "GLM-5", tokens: 300, cost: 0.30 },
+  { model: "Gemini F", tokens: 200, cost: 0.08 },
+  { model: "Gemini P", tokens: 800, cost: 1.25 },
+];
+
+const chartConfig = {
+  cost: {
+    label: "Cost per 1M",
+    color: "#e81b25",
+  },
+} satisfies ChartConfig;
 
 const CheckIcon = ({ className = "" }: { className?: string }) => (
   <svg
@@ -57,7 +85,7 @@ const ToggleSwitch = ({
       className={[
         "relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none",
         "ring-1 ring-inset ring-white/10",
-        enabled ? "bg-claw-red" : "bg-white/5",
+        enabled ? "bg-[#e81b25]" : "bg-white/5",
       ].join(" ")}
       aria-pressed={enabled}
     >
@@ -131,7 +159,7 @@ export function PricingSection() {
                     KOOMPI Mini + Claw
                   </p>
                 </div>
-                <span className="inline-flex items-center rounded-full border border-claw-red/30 bg-claw-red/10 px-3 py-1 text-[10px] font-bold text-claw-red uppercase tracking-wider">
+                <span className="inline-flex items-center rounded-full border border-[#e81b25]/30 bg-[#e81b25]/10 px-3 py-1 text-[10px] font-bold text-[#e81b25] uppercase tracking-wider">
                   Self-Hosted
                 </span>
               </div>
@@ -168,7 +196,7 @@ export function PricingSection() {
           {/* Managed Card */}
           <motion.div
             custom={0.3} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-            className="rounded-[2.5rem] p-2 bg-claw-red/5 backdrop-blur-md border border-claw-red/20 shadow-2xl ring-1 ring-inset ring-claw-red/10"
+            className="rounded-[2.5rem] p-2 bg-[#e81b25]/5 backdrop-blur-md border border-[#e81b25]/20 shadow-2xl ring-1 ring-inset ring-[#e81b25]/10"
           >
             <div className="rounded-[2rem] p-10 mb-2 bg-[#0a0a0b]/80 backdrop-blur-sm border border-white/5 ring-1 ring-inset ring-white/5 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
@@ -215,44 +243,97 @@ export function PricingSection() {
           </motion.div>
         </div>
 
-        {/* Token Pricing Table */}
+        {/* Token Pricing Chart Hybrid */}
         <motion.div 
             custom={0.4} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-            className="max-w-4xl mx-auto"
+            className="max-w-6xl mx-auto"
         >
-          <div className="text-center mb-10">
-            <h3 className="text-2xl font-bold tracking-tight mb-2 text-white">AI Gateway Usage</h3>
-            <p className="text-white/40">Pay only for what you use. Start with as little as $1. Credits never expire.</p>
-          </div>
-          <div className="glass rounded-[2rem] overflow-hidden border-white/5">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="border-b border-white/5 bg-white/5">
-                    <th className="px-8 py-5 text-sm font-bold uppercase tracking-widest text-white/40">Model</th>
-                    <th className="px-8 py-5 text-sm font-bold uppercase tracking-widest text-white/40 text-right">Input / 1M Tokens</th>
-                    <th className="px-8 py-5 text-sm font-bold uppercase tracking-widest text-white/40 text-right">Output / 1M Tokens</th>
-                    <th className="px-8 py-5 text-sm font-bold uppercase tracking-widest text-white/40 text-right">Context</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/5">
-                  {tokenPricing.map((item) => (
-                    <tr key={item.model} className="hover:bg-white/[0.02] transition-colors">
-                      <td className="px-8 py-5 font-bold text-white">{item.model}</td>
-                      <td className="px-8 py-5 text-right text-white/60 font-mono">{item.input}</td>
-                      <td className="px-8 py-5 text-right text-white/60 font-mono">{item.output}</td>
-                      <td className="px-8 py-5 text-right text-claw-red font-bold font-mono">{item.context}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="bg-white/[0.02] backdrop-blur-xl grid rounded-[3rem] border border-white/5 overflow-hidden md:grid-cols-6">
+                {/* AI Economics Pitch */}
+                <div className="flex flex-col justify-between border-b border-white/5 p-10 md:col-span-2 md:border-r md:border-b-0">
+                    <div className="space-y-6">
+                        <div>
+                            <h2 className="text-2xl font-bold tracking-tight text-white mb-4">AI Economics</h2>
+                            <span className="block text-4xl font-black text-gradient">
+                                $0.07<span className="text-lg font-bold text-white/20 ml-1">/1M</span>
+                            </span>
+                            <p className="text-white/40 text-sm mt-4 leading-relaxed">
+                                Pay only for what you use. No lock-in. Bring your own keys or use our Gateway.
+                            </p>
+                        </div>
+
+                        <div className="space-y-4">
+                            {[
+                                "Unlimited Model Access",
+                                "Zero Expiry Credits",
+                                "Shared Context Window",
+                                "Enterprise Privacy"
+                            ].map((item) => (
+                                <div key={item} className="flex items-center gap-3">
+                                    <TrendingUp className="size-4 text-[#e81b25]" />
+                                    <span className="text-white/60 text-xs font-medium uppercase tracking-widest">{item}</span>
+                                </div>
+                            ))}
+                        </div>
+
+                        <Button asChild variant="outline" className="w-full h-12 rounded-xl border-white/5 glass hover:bg-[#e81b25]/10 text-xs font-bold uppercase tracking-widest">
+                            <a href="https://ai.koompi.cloud">View API Dashboard</a>
+                        </Button>
+                    </div>
+                </div>
+
+                {/* Chart + Table */}
+                <div className="z-10 grid gap-10 overflow-hidden p-10 md:col-span-4 lg:grid-cols-2 bg-black/20">
+                    {/* Visual Trend */}
+                    <div className="flex flex-col justify-between space-y-6">
+                        <div>
+                            <h3 className="text-lg font-bold tracking-tight text-white">Efficiency Trend</h3>
+                            <p className="text-white/30 text-xs mt-1">Cost efficiency across available models.</p>
+                        </div>
+                        <div className="bg-white/5 rounded-2xl border border-white/5 p-4">
+                            <ChartContainer config={chartConfig} className="h-[200px] w-full">
+                                <LineChart data={chartData} margin={{ left: 12, right: 12 }}>
+                                    <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                                    <XAxis
+                                        dataKey="model"
+                                        tickLine={false}
+                                        axisLine={false}
+                                        tickMargin={8}
+                                        tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 10 }}
+                                    />
+                                    <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                                    <Line
+                                        dataKey="cost"
+                                        type="monotone"
+                                        stroke="var(--color-cost)"
+                                        strokeWidth={3}
+                                        dot={{ r: 4, fill: '#e81b25' }}
+                                    />
+                                </LineChart>
+                            </ChartContainer>
+                        </div>
+                    </div>
+
+                    {/* Quick Specs Table */}
+                    <div className="relative w-full">
+                        <div className="text-xs font-bold uppercase tracking-widest text-white/30 mb-6">Model Specs</div>
+                        <div className="space-y-4">
+                            {tokenPricing.map((item) => (
+                                <div key={item.model} className="flex items-center justify-between p-4 rounded-xl bg-white/[0.03] border border-white/5 hover:border-[#e81b25]/20 transition-colors">
+                                    <div>
+                                        <p className="text-sm font-bold text-white">{item.model}</p>
+                                        <p className="text-[10px] text-[#e81b25] font-bold mt-0.5">{item.context} Context</p>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-sm font-mono font-bold text-white/80">{item.input}</p>
+                                        <p className="text-[10px] text-white/20 uppercase tracking-tighter">per 1M tokens</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div className="p-6 bg-white/[0.02] text-center border-t border-white/5">
-              <a href="https://ai.koompi.cloud" target="_blank" className="text-sm font-medium text-white/40 hover:text-claw-red transition-colors flex items-center justify-center gap-2">
-                Manage your credits at ai.koompi.cloud <ArrowRight className="w-4 h-4" />
-              </a>
-            </div>
-          </div>
         </motion.div>
       </div>
     </section>
