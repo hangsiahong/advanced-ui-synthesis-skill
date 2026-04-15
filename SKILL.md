@@ -31,7 +31,7 @@ description: "Generate premium, non-generic web UIs by assembling pre-built comp
 ### Mandatory Template
 All projects start from the **KOOMPICloud Landing Page v1** template:
 ```bash
-git clone https://github.com/KOOMPICloud/landing-page-shadcn-v1 my-project
+git clone https://github.com/KOOMPICloud/landing-page-shadcn my-project
 cd my-project && npm install
 ```
 
