@@ -2,7 +2,9 @@
 
 import { motion, Variants } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Sparkles } from "lucide-react";
+import { Banner } from "@/components/ui/banner";
+import { useState } from "react";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 30, filter: "blur(8px)" },
@@ -19,6 +21,8 @@ const fadeUp: Variants = {
 };
 
 export function HeroSection() {
+  const [showBanner, setShowBanner] = useState(true);
+
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#050505] pt-32 pb-20">
       {/* Floating Orbs */}
@@ -42,17 +46,41 @@ export function HeroSection() {
         <div className="absolute left-3/4 top-0 w-[1px] h-full bg-white/20" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 text-center flex flex-col items-center">
         <motion.div
           custom={0.1}
           initial="hidden"
           animate="visible"
           variants={fadeUp}
+          className="mb-10 w-full max-w-fit"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full border border-white/10 glass text-[10px] md:text-xs font-medium tracking-[0.2em] uppercase mb-10">
-            Your AI. Your Hardware. Your Rules.
-          </span>
+          <Banner 
+            show={showBanner}
+            onHide={() => setShowBanner(false)}
+            icon={<Sparkles className="h-3.5 w-3.5 text-claw-orange" />}
+            title={
+                <>
+                    Pre-order now for <span className="text-white font-bold">1 month free Cloud</span> + <span className="text-claw-red font-bold">$20 credit.</span>
+                </>
+            }
+            action={{
+                label: "Claim Offer",
+                onClick: () => window.location.href = "https://t.me/koompix"
+            }}
+          />
         </motion.div>
+
+        {!showBanner && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="mb-10"
+          >
+            <span className="inline-block px-4 py-1.5 rounded-full border border-white/10 glass text-[10px] md:text-xs font-medium tracking-[0.2em] uppercase">
+                Your AI. Your Hardware. Your Rules.
+            </span>
+          </motion.div>
+        )}
 
         <motion.div
           custom={0.2}

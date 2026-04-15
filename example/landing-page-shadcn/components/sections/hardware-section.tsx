@@ -1,10 +1,18 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Cpu, Wind, Wifi, Code2, ArrowRight, Copy, Check } from "lucide-react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Cpu, Wind, Wifi, Code2, ArrowRight, Copy, Check, Globe } from "lucide-react";
 import { useState } from "react";
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 30, filter: "blur(8px)" },
+  visible: (delay: number) => ({
+    opacity: 1, y: 0, filter: "blur(0px)",
+    transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] as any },
+  }),
+};
 
 export function HardwareSection() {
   const [copied, setCopied] = useState(false);
@@ -17,105 +25,153 @@ export function HardwareSection() {
   };
 
   return (
-    <section id="hardware" className="py-24 px-6">
+    <section id="hardware" className="py-24 px-6 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="mb-16">
-          <h2 className="text-6xl md:text-8xl font-bold tracking-tighter text-mask mb-4">THE HARDWARE.</h2>
-          <p className="text-xl text-white/60 max-w-2xl">KOOMPI Mini — preinstalled, pre-configured, ready out of the box.</p>
+          <motion.h2 
+            custom={0} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
+            className="text-6xl md:text-8xl font-bold tracking-tighter text-mask mb-4"
+          >
+            THE HARDWARE.
+          </motion.h2>
+          <motion.p 
+            custom={0.1} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
+            className="text-xl text-white/60 max-w-2xl"
+          >
+            KOOMPI Mini — preinstalled, pre-configured, ready out of the box.
+          </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 auto-rows-[300px] gap-4">
-          <Card className="col-span-1 md:col-span-2 md:row-span-2 glass rounded-[2rem] p-10 flex flex-col justify-between border-white/5 hover:border-claw-red/30 transition-all duration-500 overflow-hidden relative group">
-            <div className="absolute inset-0 bg-gradient-to-br from-claw-red/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="relative z-10">
-              <h3 className="text-4xl font-bold tracking-tighter mb-2">KOOMPI Mini</h3>
-              <p className="text-claw-red font-bold text-xl">$450 ONE-TIME</p>
-            </div>
-            
-            <div className="relative flex-grow flex items-center justify-center py-6">
-               <motion.img 
-                src="/koompi-mini.png" 
-                alt="KOOMPI Mini" 
-                className="w-full max-w-[320px] object-contain drop-shadow-[0_0_50px_rgba(232,27,37,0.3)] group-hover:scale-110 transition-transform duration-700"
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-               />
-            </div>
+        <div className="mx-auto grid gap-2 sm:grid-cols-5">
+            {/* Main Hardware Pitch */}
+            <motion.div custom={0.2} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="sm:col-span-3">
+                <Card className="group relative overflow-hidden glass border-white/5 sm:rounded-none sm:rounded-tl-3xl h-full flex flex-col justify-between">
+                    <CardHeader className="p-8 md:p-10 relative z-10">
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <p className="text-3xl font-bold tracking-tighter text-white">KOOMPI Mini</p>
+                                <p className="text-claw-red font-bold text-lg mt-1 tracking-tight">$450 ONE-TIME</p>
+                            </div>
+                            <div className="size-12 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
+                                <Cpu className="size-6 text-claw-orange" />
+                            </div>
+                        </div>
+                        <p className="text-white/50 mt-4 max-w-sm text-sm leading-relaxed">
+                            Your personal AI command center. High performance, zero noise, total privacy. Ready to plug and play.
+                        </p>
+                    </CardHeader>
 
-            <Button asChild className="relative z-10 w-full h-16 rounded-full bg-claw-red hover:bg-claw-hover text-white text-lg font-bold shadow-xl shadow-claw-red/20">
-              <a href="https://t.me/koompix" target="_blank">Order via Telegram</a>
-            </Button>
-          </Card>
+                    <div className="relative flex-grow flex items-center justify-center p-6 md:p-12 mt-auto">
+                        <div className="absolute inset-0 [background:radial-gradient(75%_95%_at_50%_100%,rgba(232,27,37,0.1),transparent_100%)]"></div>
+                        <img
+                            src="/koompi-mini.png"
+                            className="w-full max-w-[380px] object-contain drop-shadow-[0_0_60px_rgba(232,27,37,0.3)] group-hover:scale-110 transition-transform duration-700 relative z-10"
+                            alt="KOOMPI Mini PC"
+                        />
+                    </div>
+                </Card>
+            </motion.div>
 
-          <Card className="col-span-1 md:col-span-2 glass rounded-[2rem] p-8 border-white/5 flex flex-col justify-between">
-            <div className="flex items-center gap-3 mb-4 opacity-40">
-              <Cpu className="w-6 h-6" />
-              <span className="font-bold tracking-widest text-xs uppercase">Performance Specs</span>
-            </div>
-            <div className="grid grid-cols-2 gap-y-6">
-              <div><p className="text-xs text-white/40 mb-1">CPU</p><p className="font-bold">Intel(R) N150</p></div>
-              <div><p className="text-xs text-white/40 mb-1">Cores</p><p className="font-bold">4C / 4T (Quad-core)</p></div>
-              <div><p className="text-xs text-white/40 mb-1">RAM</p><p className="font-bold">16GB LPDDR4x</p></div>
-              <div><p className="text-xs text-white/40 mb-1">SSD</p><p className="font-bold">256GB NVMe</p></div>
-            </div>
-            <div className="pt-4 border-t border-white/5 flex justify-between items-center text-xs font-bold text-claw-orange">
-              <span>POWER EFFICIENT</span>
-              <span>15W TDP</span>
-            </div>
-          </Card>
+            {/* Performance Specs */}
+            <motion.div custom={0.3} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="sm:col-span-2">
+                <Card className="group overflow-hidden glass border-white/5 sm:rounded-none sm:rounded-tr-3xl h-full flex flex-col">
+                    <CardHeader className="p-8">
+                        <p className="text-xl font-bold tracking-tight text-white mb-2">Performance Architecture</p>
+                        <p className="text-white/40 text-sm">Built for 24/7 AI operation.</p>
+                    </CardHeader>
 
-          <Card className="glass rounded-[2rem] p-8 border-white/5 flex flex-col justify-between">
-            <div className="flex items-center gap-3 mb-4 opacity-40">
-              <Wind className="w-6 h-6" />
-              <span className="font-bold tracking-widest text-xs uppercase">Cooling</span>
-            </div>
-            <div>
-              <p className="text-2xl font-bold tracking-tight mb-1">Fanless</p>
-              <p className="text-white/40 text-sm">Passive / Zero Noise</p>
-            </div>
-            <div className="text-5xl font-black text-gradient">0 dB</div>
-          </Card>
+                    <CardContent className="p-8 pt-0 flex-grow">
+                        <div className="grid grid-cols-2 gap-6 mb-8">
+                            <div><p className="text-[10px] uppercase font-bold text-white/30 tracking-widest mb-1">CPU</p><p className="font-bold text-sm">Intel Celeron N5105</p></div>
+                            <div><p className="text-[10px] uppercase font-bold text-white/30 tracking-widest mb-1">Cores</p><p className="font-bold text-sm">4C / 4T (Quad-core)</p></div>
+                            <div><p className="text-[10px] uppercase font-bold text-white/30 tracking-widest mb-1">RAM</p><p className="font-bold text-sm">16GB LPDDR4x</p></div>
+                            <div><p className="text-[10px] uppercase font-bold text-white/30 tracking-widest mb-1">SSD</p><p className="font-bold text-sm">256GB NVMe</p></div>
+                        </div>
 
-          <Card className="glass rounded-[2rem] p-8 border-white/5 flex flex-col justify-between">
-            <div className="flex items-center gap-3 mb-4 opacity-40">
-              <Wifi className="w-6 h-6" />
-              <span className="font-bold tracking-widest text-xs uppercase">I/O</span>
-            </div>
-            <ul className="text-sm font-bold space-y-2 text-white/60">
-              <li>• WiFi 6 (802.11ax)</li>
-              <li>• Bluetooth 5.2</li>
-              <li>• Gigabit Ethernet</li>
-              <li>• 2x USB-A / 1x USB-C</li>
-            </ul>
-          </Card>
+                        <div className="relative rounded-2xl border border-white/10 bg-black/40 overflow-hidden aspect-video group-hover:border-claw-red/30 transition-colors">
+                            <div className="absolute inset-0 [background:radial-gradient(50%_75%_at_75%_50%,rgba(232,27,37,0.1),transparent_100%)]"></div>
+                            <div className="p-6 flex flex-col justify-between h-full">
+                                <Wind className="size-8 text-claw-orange opacity-50" />
+                                <div>
+                                    <p className="text-2xl font-black text-gradient">15W TDP</p>
+                                    <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Power Efficient</p>
+                                </div>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+            </motion.div>
 
-          <Card className="col-span-1 md:col-span-2 glass rounded-[2.5rem] p-10 border-white/5 flex flex-col justify-between relative group overflow-hidden">
-             <div className="absolute -right-10 -bottom-10 opacity-5 group-hover:opacity-10 transition-opacity">
-                <Code2 className="w-64 h-64" />
-             </div>
-             <div className="relative z-10">
-                <div className="flex items-center gap-3 mb-4 opacity-40">
-                  <Code2 className="w-6 h-6" />
-                  <span className="font-bold tracking-widest text-xs uppercase">One-Script Setup</span>
-                </div>
-                <h3 className="text-2xl font-bold mb-4">Self-Hosted Deployment</h3>
-                <div className="bg-black/40 rounded-xl p-4 border border-white/10 flex items-center justify-between gap-4 mb-6">
-                  <code className="text-xs text-white/60 truncate font-mono">
-                    {installScript}
-                  </code>
-                  <button 
-                    onClick={copyToClipboard}
-                    className="p-2 hover:bg-white/10 rounded-lg transition-colors flex-shrink-0"
-                  >
-                    {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4 text-white/40" />}
-                  </button>
-                </div>
-             </div>
-             <a href="https://github.com/koompi/openclaw-template" target="_blank" className="relative z-10 flex items-center gap-2 text-claw-red font-bold hover:gap-4 transition-all">
-                View on GitHub <ArrowRight className="w-5 h-5" />
-             </a>
-          </Card>
+            {/* Silent & Connectivity */}
+            <motion.div custom={0.4} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="sm:col-span-2">
+                <Card className="group glass border-white/5 sm:rounded-none sm:rounded-bl-3xl p-8 md:p-10 h-full flex flex-col justify-between">
+                    <div>
+                        <p className="text-2xl font-bold tracking-tighter text-white mb-6">Silent. Connected. Seamless.</p>
+                        <div className="flex gap-4 mb-10">
+                            <div className="bg-white/5 size-14 flex items-center justify-center rounded-2xl border border-white/10 shadow-lg group-hover:border-claw-red/30 transition-colors">
+                                <Wind className="size-6 text-white/40" />
+                            </div>
+                            <div className="bg-white/5 size-14 flex items-center justify-center rounded-2xl border border-white/10 shadow-lg group-hover:border-claw-orange/30 transition-colors">
+                                <Wifi className="size-6 text-white/40" />
+                            </div>
+                            <div className="bg-white/5 size-14 flex items-center justify-center rounded-2xl border border-white/10 shadow-lg group-hover:border-blue-500/30 transition-colors">
+                                <Globe className="size-6 text-white/40" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="space-y-4">
+                        <div className="flex justify-between items-end border-b border-white/5 pb-4">
+                            <span className="text-white/40 text-xs font-bold uppercase tracking-widest">Cooling</span>
+                            <span className="text-3xl font-black text-gradient">0 dB</span>
+                        </div>
+                        <ul className="grid grid-cols-2 gap-y-2 text-[10px] font-bold text-white/30 uppercase tracking-widest">
+                            <li>• WiFi 6</li>
+                            <li>• BT 5.2</li>
+                            <li>• Gigabit</li>
+                            <li>• USB-C</li>
+                        </ul>
+                    </div>
+                </Card>
+            </motion.div>
+
+            {/* One-Script Setup */}
+            <motion.div custom={0.5} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="sm:col-span-3">
+                <Card className="group relative glass border-white/5 sm:rounded-none sm:rounded-br-3xl h-full flex flex-col overflow-hidden">
+                    <CardHeader className="p-8 md:p-10">
+                        <div className="flex items-center gap-3 mb-2">
+                            <Code2 className="size-5 text-claw-red" />
+                            <p className="font-bold tracking-tight text-white uppercase text-xs opacity-40">One-Script Setup</p>
+                        </div>
+                        <p className="text-2xl font-bold tracking-tight text-white">Self-Hosted Deployment</p>
+                        <p className="text-white/50 mt-2 max-w-sm text-sm">Deploy the full Claw experience on any machine with a single command.</p>
+                    </CardHeader>
+                    
+                    <CardContent className="relative h-fit px-8 pb-10 mt-auto">
+                        <div className="bg-black/60 rounded-2xl p-6 border border-white/10 flex items-center justify-between gap-6 group-hover:border-claw-red/30 transition-colors relative z-10">
+                            <code className="text-xs text-white/70 truncate font-mono">
+                                {installScript}
+                            </code>
+                            <button 
+                                onClick={copyToClipboard}
+                                className="size-10 bg-white/5 hover:bg-white/10 rounded-xl transition-colors flex items-center justify-center flex-shrink-0 border border-white/10"
+                            >
+                                {copied ? <Check className="size-4 text-emerald-500" /> : <Copy className="size-4 text-white/40" />}
+                            </button>
+                        </div>
+                        
+                        <div className="mt-8 flex items-center gap-4">
+                            <div className="size-8 rounded-lg bg-white/5 border border-dashed border-white/20 flex items-center justify-center">
+                                <img src="https://oxymor-ns.tailus.io/logos/github.svg" className="size-4 invert opacity-40" alt="github" />
+                            </div>
+                            <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest">Connects to AI Gateway & Cloud</p>
+                        </div>
+
+                        {/* Background Decoration */}
+                        <div className="absolute -right-10 -bottom-10 size-64 bg-claw-red/5 blur-3xl pointer-events-none"></div>
+                    </CardContent>
+                </Card>
+            </motion.div>
         </div>
       </div>
     </section>
